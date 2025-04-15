@@ -88,34 +88,39 @@ class CharacterRepo{
 
     async sendMessage(message, characterId, userId){
         try{
-            const character = await Character.findById({_id: characterId, user: userId});
+            const character = await Character.findById(characterId);
 
             if(!character){
                 throw new NotFoundError("Character", characterId);
             }
             
-            character.conversationHistory.push({ role: 'user', content: message });
+            // character.conversationHistory.push({ role: 'user', content: message });
 
             const chat = ai.chats.create({
                 model: AI_MODEL,
                 history:[
                     {
                         role: "user",
-                        parts:[character.systemPrompt]
+                        parts:[{text: character.systemPrompt}]
                     },
                     {
                         role: "model",
-                        parts: ["I understand and will stay in character as described."]
+                        parts: [{text: "I understand and will stay in character as described."}]
                     },
                     ...character.conversationHistory.map(msg => ({
                         role: msg.role,
-                        parts: [msg.content]
+                        parts: [{text: msg.content}]
                     })),
                 ]
             });
+            
+            console.log(message);
+            const result = await chat.sendMessage({
+                message: message
+            });
+            console.log(result.candidates[0].content.parts[0].text);
 
-            const result = await chat.sendMessage(message);
-            const response = result.response.text();
+            const response = result.candidates[0].content.parts[0].text;
 
             character.conversationHistory.push({ role: 'user', content: message });
             character.conversationHistory.push({ role: 'model', content: response });

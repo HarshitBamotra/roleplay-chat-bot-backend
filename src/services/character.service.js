@@ -5,7 +5,7 @@ class CharacterService {
 
     async getCharacters(userId){
         try{
-            const characters  = await this.characterRepo.getAllCharacters(userId);
+            const characters  = await this.characterRepo.getCharacters(userId);
             return characters;
         }
         catch(err){
