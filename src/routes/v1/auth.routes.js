@@ -5,9 +5,9 @@ const authenticate = require("../../utils/authenticate");
 
 const authRouter = express.Router();
 
-authRouter.use("/register", authController.register);
-authRouter.use("/login", authController.login);
-authRouter.use("/me", authenticate, authController.getCurrentUser);
+authRouter.post("/register", authController.register);
+authRouter.post("/login", authController.login);
+authRouter.get("/me", authenticate, authController.getCurrentUser);
 
 
 module.exports = authRouter;

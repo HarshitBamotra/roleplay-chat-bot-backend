@@ -1,11 +1,13 @@
 // middleware/auth.middleware.js
 const passport = require('passport');
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const User = require('../models/user');
+
+const User = require('../models/user.model');
+const {JWT_SECRET} = require("../config/server.config");
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET
+  secretOrKey: JWT_SECRET
 };
 
 passport.use(new JwtStrategy(jwtOptions, async (payload, done) => {
