@@ -1,6 +1,7 @@
 const Character = require("../models/character.model");
 const {NotFoundError} = require("../errors");
-
+const ai = require("../config/ai.config");
+const { AI_MODEL } = require("../config/server.config");
 
 class CharacterRepo{
     async getCharacters(userId){
@@ -92,8 +93,36 @@ class CharacterRepo{
             if(!character){
                 throw new NotFoundError("Character", characterId);
             }
-
             
+            character.conversationHistory.push({ role: 'user', content: message });
+
+            const chat = ai.chats.create({
+                model: AI_MODEL,
+                history:[
+                    {
+                        role: "user",
+                        parts:[character.systemPrompt]
+                    },
+                    {
+                        role: "model",
+                        parts: ["I understand and will stay in character as described."]
+                    },
+                    ...character.conversationHistory.map(msg => ({
+                        role: msg.role,
+                        parts: [msg.content]
+                    })),
+                ]
+            });
+
+            const result = await chat.sendMessage(message);
+            const response = result.response.text();
+
+            character.conversationHistory.push({ role: 'user', content: message });
+            character.conversationHistory.push({ role: 'model', content: response });
+
+            await character.save();
+
+            return response;
         }
         catch(err){
             console.log(err);
