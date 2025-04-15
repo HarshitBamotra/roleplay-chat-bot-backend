@@ -5,6 +5,7 @@ const cors = require("cors");
 const connectToDB = require("./config/db.config");
 const apiRouter = require("./routes");
 const {PORT} = require("./config/server.config");
+const errorHandler = require("./utils/errorHandler");
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.use(cors({
 
 
 app.use("/api", apiRouter);
-
+app.use(errorHandler);
 
 app.get('/ping', (req, res)=>{
     return res.json({

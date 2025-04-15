@@ -1,6 +1,8 @@
+const AuthService = require("./auth.service");
 const CharacterService = require("./character.service");
 
 
 module.exports = {
-    characterService: CharacterService
+    CharacterService: CharacterService,
+    AuthService: AuthService
 }
