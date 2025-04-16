@@ -6,8 +6,7 @@ const jwt = require('jsonwebtoken');
 class AuthRepo {
     async register(userData) {
         try {
-            const { username, email, password } = userData;
-
+            const { username, email, password, profileImage } = userData;
 
             const existingUser = await User.findOne({ email });
 
@@ -24,7 +23,8 @@ class AuthRepo {
                         user: {
                             id: existingUser._id,
                             username: existingUser.username,
-                            email: existingUser.email
+                            email: existingUser.email,
+                            profileImage: existingUser.profileImage
                         },
                         isNewUser: false
                     };
@@ -38,7 +38,7 @@ class AuthRepo {
             }
 
 
-            const user = new User({ username, email, password });
+            const user = new User({ username, email, password, profileImage });
             await user.save();
 
 
@@ -50,7 +50,8 @@ class AuthRepo {
                 user: {
                     id: user._id,
                     username: user.username,
-                    email: user.email
+                    email: user.email,
+                    profileImage: user.profileImage
                 },
                 isNewUser: true
             };
@@ -96,17 +97,8 @@ class AuthRepo {
     async updateUser(userId, userData){
         try{
             const {username, profileImage} = userData;
-            let user;
-
-            if(username && profileImage){
-                user = await User.findByIdAndUpdate(userId, {username, profileImage}, {new: true});
-            }
-            else if(username){
-                user = await User.findByIdAndUpdate(userId, {username}, {new: true});
-            }
-            else{
-                user = await User.findByIdAndUpdate(userId, {profileImage}, {new: true});
-            }
+            
+            const user = await User.findByIdAndUpdate(userId, {username, profileImage}, {new: true});
 
             console.log(user);
             if(!user){

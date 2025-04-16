@@ -6,8 +6,12 @@ const authService = new AuthService(new AuthRepo);
 
 async function register(req, res, next) {
     try {
-        const result = await authService.register(req.body);
-
+        const userData = {
+            ...req.body,
+            profileImage: req.file ? req.file.path : null
+        }
+        console.log(userData);
+        const result = await authService.register(userData);
         if (result.userExists) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 success: false,
