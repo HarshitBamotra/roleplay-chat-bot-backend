@@ -10,7 +10,7 @@ async function register(req, res, next) {
             ...req.body,
             profileImage: req.file ? req.file.path : null
         }
-        console.log(userData);
+        
         const result = await authService.register(userData);
         if (result.userExists) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -96,10 +96,8 @@ async function updateUser(req, res, next) {
             profileImage: req.file ? req.file.path : null
         }
 
-        console.log(userData);
-
         const result = await authService.updateUser(req.user._id, userData);
-        console.log(result);
+        
         return res.status(StatusCodes.CREATED).json({
             success: true,
             message: "Character Created Successfully",

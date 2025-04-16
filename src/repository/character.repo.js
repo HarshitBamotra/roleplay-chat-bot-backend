@@ -33,7 +33,6 @@ class CharacterRepo{
 
     async createCharacter(characterData, userId){
         try{
-            console.log(characterData);
             const { name, personality, backstory, imageUrl } = characterData;
             const systemPrompt = `You are ${name}, a roleplay character with the following personality: ${personality}. Your backstory is: ${backstory}. Respond to all messages in character, never breaking the fourth wall.`;
 
@@ -116,11 +115,9 @@ class CharacterRepo{
                 ]
             });
             
-            console.log(message);
             const result = await chat.sendMessage({
                 message: message
             });
-            console.log(result.candidates[0].content.parts[0].text);
 
             const response = result.candidates[0].content.parts[0].text;
 

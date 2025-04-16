@@ -65,7 +65,6 @@ class AuthRepo {
 
     async login(userData) {
         try {
-            console.log(userData);
             const { email, password } = userData;
 
             const user = await User.findOne({ email });
@@ -100,7 +99,6 @@ class AuthRepo {
             
             const user = await User.findByIdAndUpdate(userId, {username, profileImage}, {new: true});
 
-            console.log(user);
             if(!user){
                 throw new NotFound("User", userId);
             }
