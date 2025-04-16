@@ -26,7 +26,13 @@ async function getCharacters(req, res, next){
 
 async function createCharacter(req, res, next){
     try{
-        const character = await characterService.createCharacter(req.body, req.user._id);
+
+        const characterData = {
+            ...req.body,
+            imageUrl: req.file ? req.file.path : null
+        };
+        
+        const character = await characterService.createCharacter(characterData, req.user._id);
         return res.status(StatusCodes.CREATED).json({
             success: true,
             message: "Character Created Successfully",

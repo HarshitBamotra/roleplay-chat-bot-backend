@@ -5,5 +5,8 @@ module.exports = {
     PORT: process.env.PORT,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     AI_MODEL: process.env.AI_MODEL,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
 }

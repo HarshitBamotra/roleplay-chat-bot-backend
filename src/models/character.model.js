@@ -5,6 +5,7 @@ const CharacterSchema = new mongoose.Schema({
     personality: String,
     backstory: String,
     systemPrompt: String,
+    imageUrl: String,
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

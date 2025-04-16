@@ -33,7 +33,8 @@ class CharacterRepo{
 
     async createCharacter(characterData, userId){
         try{
-            const { name, personality, backstory } = characterData;
+            console.log(characterData);
+            const { name, personality, backstory, imageUrl } = characterData;
             const systemPrompt = `You are ${name}, a roleplay character with the following personality: ${personality}. Your backstory is: ${backstory}. Respond to all messages in character, never breaking the fourth wall.`;
 
             const character = new Character({
@@ -41,6 +42,7 @@ class CharacterRepo{
                 personality,
                 backstory,
                 systemPrompt,
+                imageUrl,
                 user: userId,
                 conversationHistory: []
             });
@@ -122,12 +124,12 @@ class CharacterRepo{
 
             const response = result.candidates[0].content.parts[0].text;
 
-            character.conversationHistory.push({ role: 'user', content: message });
-            character.conversationHistory.push({ role: 'model', content: response });
+            character.conversationHistory.push({ role: 'user', content: message, timestamp: Date.now()});
+            character.conversationHistory.push({ role: 'model', content: response, timestamp: Date.now() });
 
             await character.save();
 
-            return response;
+            return {response, timestamp: Date.now()};
         }
         catch(err){
             console.log(err);
